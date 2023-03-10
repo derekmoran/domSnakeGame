@@ -2,8 +2,8 @@
 
 My take on a snake game written in the DOM using raw HTML5, CSS3, and vanilla JavaScript
 
-This was the product of a training and learning exercise. I just wanted to see if I could do it, and to ramp up my front-end skills in the process.
-The code quality will surely reflect this context. Enjoy it for what it is :)
+This was the product of a self-imposed training and learning exercise. I just wanted to see if I could do it, and to ramp up my front-end skills in the process.
+The code quality will surely reflect this context. Please enjoy it for what it is :)
 
 ## System Requirements
 
