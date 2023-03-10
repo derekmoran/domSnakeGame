@@ -1,0 +1,437 @@
+﻿:root {
+    --background-colour: black;
+
+    --console-colour: navy;
+    --console-border-colour: white;
+    --console-text-colour: white;
+
+    --title-panel-colour: darkolivegreen;
+    --title-colour: white;
+    --title-shadow-colour1: green;
+    --title-shadow-colour2: greenyellow;
+
+    --author-color: white;
+
+    --snake-button-background-colour: green;
+    --snake-button-pressed-colour: greenyellow;
+    --snake-button-shadow-colour: black;
+
+    --touch-panel-background-colour: darkslategray;
+    --touch-panel-colour: white;
+    --touch-panel-clicked-colour: yellowgreen;
+
+    --snake-head-colour: green;
+    --snake-body-colour: lime;
+    --snake-head-dead-colour: red;
+
+    --wall-colour: yellow;
+
+    --food-colour: crimson;
+
+    --keyboard-colour: dimgray;
+
+    --arena-popup-background-colour: blue;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+* {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-colour);
+}
+
+#loading {
+    color: var(--console-text-colour);
+    font-size: 5vmin;
+    text-align: center;
+}
+
+#inadequate-viewport {
+    color: var(--console-text-colour);
+    font-size: 5vmin;
+    text-align: center;
+}
+
+#game-area {
+    display: flex;
+}
+
+#game-area > * {
+    flex: 0 0 auto;
+}
+
+@media (orientation:portrait) {
+
+    /* Supporting no less than the iPhone 5 viewport of 320x568 */
+    @media not ( (min-height: 568px) and (min-width: 320px) ) {
+        #inadequate-viewport {
+            display: block;
+        }
+
+        #game-area {
+            visibility: hidden;
+        }
+    }
+
+    :root {
+        /*
+            Prefer max width for arena, but only if resultant height does not exceed 60 percent
+            Each auxilary panel is not to exceed half of the arena size, but can shrink some when cramped
+            Note snake.js provides --js-100vw, --js-100vh, --js-40vw, and --js-40vh
+            ( because xvw and xvh are not reliable across browsers when search bar is present )
+        */
+        --arena-panel-width-and-height: min(var(--js-100vw), var(--js-100vh) - var(--js-40vh));
+    }
+
+    #game-area {
+        flex-direction: column;
+    }
+
+    #title-and-button-panel {
+        flex-direction: row;
+    }
+
+    .auxilary-panel {
+        width: var(--arena-panel-width-and-height);
+        height: min(
+            calc( var(--arena-panel-width-and-height) / 2 ),
+            calc( ( var(--js-100vh) - var(--arena-panel-width-and-height) ) / 2 )
+        );
+    }
+
+    .landscape-display {
+        display: none;
+    }
+
+    .portrait-display {
+        display: block;
+    }
+
+}
+
+@media (orientation:landscape) {
+
+    /* Supporting no less than the iPhone 5 viewport of 320x568 */
+    @media not ( (min-height: 320px) and (min-width: 568px) ) {
+        #inadequate-viewport {
+            display: block;
+        }
+
+        #game-area {
+            visibility: hidden;
+        }
+    }
+
+    :root {
+        /*
+            Prefer max height for arena, but only if resultant width does not exceed 60 percent
+            Each auxilary panel is not to exceed half of the arena size, but can shrink some when cramped
+            Note snake.js provides --js-100vw, --js-100vh, --js-40vw, and --js-40vh
+            ( because xvw and xvh are not reliable across browsers when search bar is present )
+        */
+        --arena-panel-width-and-height: min(var(--js-100vh), var(--js-100vw) - var(--js-40vw));
+    }
+
+    #game-area {
+        flex-direction: row;
+    }
+
+    #title-and-button-panel {
+        flex-direction: column;
+    }
+
+    .auxilary-panel {
+        width: min(
+            calc( var(--arena-panel-width-and-height) / 2 ),
+            calc( ( var(--js-100vw) - var(--arena-panel-width-and-height) ) / 2 )
+        );
+        height: var(--arena-panel-width-and-height);
+    }
+
+    .landscape-display {
+        display: block;
+    }
+
+    .portrait-display {
+        display: none;
+    }
+
+}
+
+.absolute-centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.absolute-top-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.max-width-height {
+    width: 100%;
+    height: 100%;
+}
+
+.not-displayed {
+    display: none;
+}
+
+.not-visible {
+    visibility: hidden;
+    position: absolute;
+}
+
+.relative {
+    position: relative;
+}
+
+.bold-italic {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.console-border-large {
+    border: 2px solid var(--console-border-colour);
+}
+
+.console-border-small {
+    border: 1px solid var(--console-border-colour);
+}
+
+#arena-message {
+    color: var(--console-text-colour);
+    font-weight: bold;
+    font-size: 8vmin;
+    margin: auto;
+    white-space: pre-line;
+    text-align: center;
+}
+
+.arena-message-container-fullscreen {
+    display: flex;
+    background-color: var(--console-colour);
+}
+
+.arena-message-container-popup {
+    display: flex;
+    background-color: transparent;
+}
+
+.arena-message-popup {
+    background-color: var(--arena-popup-background-colour);
+    padding: 1vmin;
+    border: 2px solid var(--console-text-colour);
+    border-radius: 10px;
+    opacity: 0.40;
+}
+
+.instructions {
+    color: var(--console-text-colour);;
+    font-size: calc( var(--arena-panel-width-and-height) / 32 );
+    padding: calc( var(--arena-panel-width-and-height) / 40 );
+    background-color: var(--console-colour);
+}
+
+.instructions h1 {
+    margin: 0;
+    padding: 2px;
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: calc( var(--arena-panel-width-and-height) / 25);
+}
+
+.instructions-key {
+    display: inline-block;
+    background-color: var(--keyboard-colour);
+    padding: 2px;
+}
+
+.instructions-snake-button {
+    display: inline-block;
+    border-radius: 5px;
+    color: var(--title-colour);
+    background-color: var(--snake-button-background-colour);
+    padding: 2px;
+}
+
+.instructions-touch-panel {
+    display: inline-block;
+    background-color: var(--touch-panel-background-colour);
+}
+
+/*
+    Note snake.js provides --js-arena-num-grid-rows, --js-arena-num-grid-cols, and --js-arena-header-row-span
+    We can assume the provided span of the header is such that the grid area will result in square cell sizes
+*/
+#arena-header-cell {
+    grid-area: 1 / 1 / span var(--js-arena-header-row-span) / span var(--js-arena-num-grid-cols);
+    border-bottom: 2px solid var(--console-border-colour);
+    display: flex;
+    justify-content: stretch;
+    padding: 5px;
+}
+
+#arena-grid {
+    width: var(--arena-panel-width-and-height);
+    height: var(--arena-panel-width-and-height);
+    margin: 0 auto;
+    display: grid;
+
+    grid-template: auto repeat(var(--js-arena-num-grid-rows), auto) / repeat(var(--js-arena-num-grid-cols), auto);
+
+    background-color: var(--console-colour);
+}
+
+#arena-grid > div:not(:first-child) {
+    border: 1px solid var(--console-colour);
+}
+
+.arena-header {
+    margin: auto 0;
+    color: var(--console-text-colour);
+    white-space: nowrap;
+    font-weight: bold;
+    font-size: 3vmin;
+}
+
+#level-header {
+    flex: 1;
+    text-align: left;
+}
+
+#message-header {
+    flex: 5;
+    text-align: center;
+    font-style: italic;
+}
+
+#food-header {
+    flex: 1;
+    text-align: right;
+}
+
+#title-and-button-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    background-color: var(--title-panel-colour);
+}
+
+#title-and-button-panel > * {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 8vmin;
+    color: var(--title-colour);
+    text-shadow:
+    0 0 1vmin var(--title-shadow-colour1),
+    0 0 2vmin var(--title-shadow-colour2),
+    0 0 3vmin var(--title-shadow-colour1),
+    0 0 4vmin var(--title-shadow-colour2),
+    0 0 5vmin var(--title-shadow-colour1);
+}
+
+#author {
+    white-space: nowrap;
+    font-size: 2vmin;
+    color: var(--author-color);
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.snake-button {
+    font-size: 8vmin;
+    border-radius: 1vmin;
+    border: 0.5vmin solid var(--snake-button-shadow-colour);
+    color: var(--title-colour);
+    background-color: var(--snake-button-background-colour);
+    box-shadow: 0.2vmin 0.3vmin var(--snake-button-shadow-colour);
+}
+
+.snake-button-clicked {
+    background-color: var(--snake-button-pressed-colour);
+}
+
+#touchpad-panel {
+    display: grid;
+    grid-template-columns: 50% 50%;
+
+    background-color: var(--touch-panel-background-colour);
+}
+
+.touchpad-clicked {
+    background-color: var(--touch-panel-clicked-colour);
+}
+
+.pad-direction {
+    border-color: var(--touch-panel-colour);
+    border-width: 1px;
+}
+
+#pad-left-up {
+    border-style: none dashed dashed none;
+}
+
+#pad-right-up {
+    border-style: none none dashed dashed;
+}
+
+#pad-left-down {
+    border-style: dashed dashed none none;
+}
+
+#pad-right-down {
+    border-style: dashed none none dashed;
+}
+
+.wall {
+    background-color: var(--wall-colour);
+}
+
+.snakehead {
+    background-color: var(--snake-head-colour);
+    border-radius: 5px;
+}
+
+.snakeheaddead {
+    background-color: var(--snake-head-dead-colour);
+    border-radius: 5px;
+}
+
+.snakebody {
+    background-color: var(--snake-body-colour);
+}
+
+.food {
+    background-color: var(--food-colour);
+    border-radius: 2px;
+    animation: pulsate 5s infinite;
+}
+
+@keyframes pulsate {
+    100% {
+        border-radius: 10px;
+    }
+}

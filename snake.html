@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <link href="./css/snake.css" rel="stylesheet" type="text/css" />
+    <title>SNAKE - By Derek Moran 2023</title>
+</head>
+<body>
+
+    <!--
+        Thanks to pixabay.com for these free-to-use sound effects:
+
+        "Pixabay is a vibrant community of creatives, sharing royalty free images, videos and music.
+        All content is released under the Pixabay License, which makes them safe to use without
+        asking for permission or giving credit to the artist - even for commercial purposes."
+    -->
+    <audio id="soundFx_crunch" preload="auto">
+        <source src="./audio/crunch.aac" type="audio/aac">
+        <source src="./audio/crunch.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="soundFx_chomp" preload="auto">
+        <source src="./audio/chomp.aac" type="audio/aac">
+        <source src="./audio/chomp.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="soundFx_victory" preload="auto">
+        <source src="./audio/victory.aac" type="audio/aac">
+        <source src="./audio/victory.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="soundFx_beep" preload="auto">
+        <source src="./audio/beep.aac" type="audio/aac">
+        <source src="./audio/beep.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="soundFx_pause" preload="auto">
+        <source src="./audio/pause.aac" type="audio/aac">
+        <source src="./audio/pause.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="soundFx_unpause" preload="auto">
+        <source src="./audio/unpause.aac" type="audio/aac">
+        <source src="./audio/unpause.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="soundFx_reset" preload="auto">
+        <source src="./audio/reset.aac" type="audio/aac">
+        <source src="./audio/reset.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="soundFx_winner" preload="auto">
+        <source src="./audio/winner.aac" type="audio/aac">
+        <source src="./audio/winner.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="soundFx_click" preload="auto">
+        <source src="./audio/click.aac" type="audio/aac">
+        <source src="./audio/click.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="loading" class="absolute-centered">LOADING ...</div>
+    <div id="loaded" class="not-visible">
+        <div id="inadequate-viewport" class="absolute-centered not-displayed">
+            Snake requires a viewport of at least 320x568 or 568x320<br><br>SORRY :(
+        </div>
+        <div id="game-area" class="absolute-centered">
+            <div id="title-and-button-panel" class="auxilary-panel console-border-large relative">
+                <div id="title-horizontal" class="title portrait-display">
+                    <div>SNAKE</div>
+                </div>
+                <div id="title-vertical" class="title landscape-display">
+                    <div>S<BR>N<BR>A<BR>K<BR>E</div>
+                </div>
+                <button id="snake-button" class="snake-button clickable">~</button>
+                <div id="author">By Derek Moran 2023</div>
+            </div>
+            <div id="arena-panel" class="relative">
+                <div id="instructions" class="instructions absolute-top-left max-width-height console-border-large">
+                    <h1>Gameplay</h1>
+                    <p>
+                        Control snake <span class="snakehead">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="snakebody">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        and eat the required food <span class="food">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        while avoiding walls <span class="wall">&nbsp;&nbsp;&nbsp;&nbsp;</span> ( and yourself ).
+                        Your progress will be saved at the end of each level. You can retry as many times as you like.
+                    </p>
+                    <h1>Controls</h1>
+                    <p>
+                        <span class="bold-italic">Reset Game:</span> To reset the game ( and your progress ), press and hold the <span class="instructions-snake-button console-border-small">~</span> button for 2 seconds.
+                        You can also press <span class="instructions-key console-border-small">R</span> on a keyboard.
+                    </p>
+                    <p>
+                        <span class="bold-italic">Pause Game:</span> Pause/Unpause an active game by clicking the <span class="instructions-snake-button console-border-small">~</span> button.
+                        You can also press <span class="instructions-key console-border-small">Esc</span> on a keyboard.
+                    </p>
+                    <p>
+                        <span class="bold-italic">Control Snake:</span> Click the upper/lower, or left/right, half of the touch panel <span class="instructions-touch-panel console-border-small">&nbsp;+&nbsp;</span>.
+                        Plan a move ahead, as this will allow for rapid direction change ( ie top left is BOTH up and left; it depends on snake's direction ).
+                        You can also use the <span class="instructions-key console-border-small">&larr;</span><span class="instructions-key console-border-small">&nbsp;&uarr;&nbsp;</span><span class="instructions-key console-border-small">&nbsp;&darr;&nbsp;</span><span class="instructions-key console-border-small">&rarr;</span> keys on a keyboard.
+                    </p>
+                    <p>
+                        <span class="bold-italic">Start the game:</span> When you're ready, click the <span class="instructions-snake-button console-border-small">~</span> button.
+                        You can also press <span class="instructions-key console-border-small">N</span> on a keyboard.
+                    </p>
+                </div>
+                <span class="not-visible">
+                    <!-- snake.js uses these for it's output messages -->
+                    <span id="message-paused">PAUSED</span>
+                    <span id="message-resetting">Resetting game</span>
+                    <span id="message-continuing-game">Loading saved progress</span>
+                    <span id="message-you-died">You died!</span>
+                    <span id="message-try-again">Try Again!</span>
+                    <span id="message-level">LEVEL [0]</span>
+                    <span id="message-you-won">You won!!!</span>
+                    <span id="message-thanks">Thanks for playing!! I hope you had fun :)</span>
+                </span>
+                <div id="arena-message-container" class="not-displayed absolute-top-left max-width-height console-border-large">
+                    <div id="arena-message"></div>
+                </div>
+                <div id="arena-grid" class="console-border-large">
+                    <div id="arena-header-cell">
+                        <div id="level-header" class="arena-header">LEVEL: <span></div>
+                        <div id="message-header" class="arena-header"></div>
+                        <div id="food-header" class="arena-header">FOOD: <span></span></div>
+                    </div>
+                    <!-- snake.js will populate the arena grid here -->
+                </div>
+            </div>
+            <div id="touchpad-panel" class="auxilary-panel clickable console-border-large">
+                <div id="pad-left-up" class="pad-direction"></div>
+                <div id="pad-right-up" class="pad-direction"></div>
+                <div id="pad-left-down" class="pad-direction"></div>
+                <div id="pad-right-down" class="pad-direction"></div>
+            </div>
+        </div>
+        <script src="./js/snakeLevelData.js?v=1" type="text/javascript"></script>
+        <script src="./js/snake.js?v=1" type="text/javascript"></script>
+    </div>
+</body>
+</html>
