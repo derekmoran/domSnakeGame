@@ -7,8 +7,7 @@ The code quality will surely reflect this context. Enjoy it for what it is :)
 
 ## System Requirements
 
-Developed and tested on Chrome 110+.
-Does seems to work fine in Firefox 110+, Edge 110+, and Safari 16.3+.
+Developed and tested on Chrome 110+, but seems to work fine in Firefox 110+, Edge 110+, and Safari 16.3+ as well.
 YMMV on other browsers.
 
 I've tried to make this responsive. It *should* work on resolutions as low as 320x568.
